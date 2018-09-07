@@ -8,4 +8,6 @@ The repo contains:
 * Laravel Collective - HTML Form Helpers
 * CKEditor
 
-I'll update this repo by next week. I'm going to add authentications, etc. Feel free to fork if you like :)
+#Kindly update the .env file to your liking. 
+
+> I'll update this repo by next week. I'm going to add authentications, etc. Feel free to fork if you like :)
