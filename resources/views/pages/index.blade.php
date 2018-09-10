@@ -14,8 +14,6 @@
             </p>
             <hr class="my-4">
                 <p>Laravel exercise by Juts</p>
-                <p class="lead">
-                <a class="btn btn-primary btn-lg" href="/posts" role="button">See posts</a>
-            </p>
+                <p class="lead"></p>
     </div>
 @endsection

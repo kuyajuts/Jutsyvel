@@ -18,7 +18,7 @@
                 <p class="card-text">{!! $post->postBody !!}</p>
                 </div>
                 <div class="card-footer text-muted text-right">
-                    <i>Written at {{$post->created_at}}</i>
+                    <i>Written at  {{$post->created_at}} by {{$post->name}}</i>
                 </div>
             </div>
 

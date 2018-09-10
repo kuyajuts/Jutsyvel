@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\User;
+use DB;
+
 class PostsController extends Controller
 {
     /**
@@ -11,10 +14,36 @@ class PostsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index','show'] ]);
+    }
+
     public function index()
     {
-        $posts = Post::orderBy('created_at','desc')->paginate(5);
-        return view('posts.index')->with('posts',$posts);
+        /*
+        $user_id = auth()->user('id');
+        echo $user_id;
+
+        $posts = DB::table('posts')
+                        ->join('users', 'posts.user_id', '=', 'users.id')
+                        ->where('posts.user_id', '=', $user_id->id)
+                        ->orderBy('created_at','desc')
+                        ->get(['users.name', 'posts.postId', 'posts.postTitle', 'posts.postBody'])
+                        ->paginate(5);
+        */
+
+        $user_id = auth()->user('id');
+        $posts = User::find($user_id);
+        $final = Post::select('posts.postId', 'posts.postTitle', 'posts.postBody', 'users.name', 'posts.created_at')
+                        ->join('users', 'posts.user_id', '=', 'users.id')
+                        ->orderBy('created_at','desc')
+                        ->paginate(5);
+
+        echo $final;
+
+
+        return view('posts.index')->with('posts', $final);
     }
 
     /**
@@ -46,6 +75,7 @@ class PostsController extends Controller
         $post = new Post;
         $post->postTitle = $request->input('postTitle');
         $post->postBody = $request->input('postBody');
+        $post->user_id = auth()->user()->id;
         $post->isActive = true;
         $post->isDeleted = false;
         $post->save();
@@ -78,7 +108,14 @@ class PostsController extends Controller
     public function edit($id)
     {
         //
+
         $post = Post::where('postId', $id)->first();
+
+        if(auth()->user()->id !==$post->user_id){
+            return redirect('posts')->with('error', 'Unauthorized.');
+
+        }
+
         return view('posts.edit')->with('post', $post);
     }
 
@@ -102,6 +139,7 @@ class PostsController extends Controller
             if(!empty($post)){
                 $post->postTitle = $request->input('postTitle');
                 $post->postBody = $request->input('postBody');
+                $post->user_id = auth()->user()->id;
                 $post->isActive = true;
                 $post->isDeleted = false;
                 $post->save();
