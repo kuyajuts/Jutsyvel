@@ -63,6 +63,9 @@
                             </div>
                         </div>
                     </form>
+
+                    <a href="/redirect" target="_blank">Login with G+</a>
+
                 </div>
             </div>
         </div>
